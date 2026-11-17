@@ -53,9 +53,29 @@ fator       = NUM | "true" | "false" | ID | "(" expressao ")" ;
 ```
 
 ## 3. Precedência e associatividade
-| Nível | Operadores | Associatividade |
-|-------|------------|-----------------|
-| _TODO_ | | |
+
+Do nível mais fraco (resolvido por último) ao mais forte (resolvido primeiro):
+
+| Nível | Operadores | Regra da gramática | Associatividade |
+|-------|------------|--------------------|-----------------|
+| 1 | `<` `>` `<=` `>=` `==` `!=` | `comparacao` | não associativa |
+| 2 | `+` `-` | `aritmetica` | esquerda |
+| 3 | `*` `/` | `termo` | esquerda |
+| 4 | `( )` | `fator` | agrupamento (maior precedência) |
+
+**Justificativas**
+
+- **Precedência:** quanto mais fundo o nível na hierarquia
+  (`comparacao` → `aritmetica` → `termo` → `fator`), mais cedo a operação é
+  resolvida. Em `10 + 5 * 2`, o `*` fica dentro de um `termo`, abaixo do `+`,
+  então `5 * 2` é calculado primeiro.
+- **Associatividade à esquerda (`+ -` e `* /`):** a repetição `{ ... }` lê os
+  operandos da esquerda para a direita, então `10 - 4 - 3` é `(10 - 4) - 3`.
+- **Comparação não associativa:** usa `[ ... ]` (no máximo uma vez), então
+  `a < b < c` é rejeitado pela gramática.
+- **Parênteses:** `"(" expressao ")"` em `fator` reinicia a hierarquia dentro
+  do par, por isso `(1 + 2) * 3` soma antes de multiplicar.
+- **Menos unário:** não faz parte da MiniLang. `-5` é inválido sintaticamente.
 
 ## 4. Exemplos (5 programas)
 _TODO: mínimo 1 válido e 1 inválido de cada categoria (léxico, sintático, semântico), incluindo um laço mal formado._
