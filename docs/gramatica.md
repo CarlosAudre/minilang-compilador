@@ -78,8 +78,6 @@ Do nível mais fraco (resolvido por último) ao mais forte (resolvido primeiro):
 - **Menos unário:** não faz parte da MiniLang. `-5` é inválido sintaticamente.
 
 ## 4. Exemplos (5 programas)
-## 4. Exemplos (5 programas)
-
 ### Exemplo 1: válido (`exemplos/programa_valido.ml`)
 ```
 x = 10;
