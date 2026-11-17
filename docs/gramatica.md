@@ -78,7 +78,68 @@ Do nível mais fraco (resolvido por último) ao mais forte (resolvido primeiro):
 - **Menos unário:** não faz parte da MiniLang. `-5` é inválido sintaticamente.
 
 ## 4. Exemplos (5 programas)
-_TODO: mínimo 1 válido e 1 inválido de cada categoria (léxico, sintático, semântico), incluindo um laço mal formado._
+## 4. Exemplos (5 programas)
+
+### Exemplo 1: válido (`exemplos/programa_valido.ml`)
+```
+x = 10;
+y = 2 * (x + 5);
+while (x > 0) {
+  print(x);
+  x = x - 1;
+}
+soma = 0;
+for (i = 0; i < 5; i = i + 1) {
+  soma = soma + i;
+}
+if (soma > 20) {
+  print(soma);
+} else {
+  print(0);
+}
+```
+**Justificativa:** todos os símbolos pertencem aos 25 tokens (léxico). A sequência
+segue `programa = { comando }`, usando `atribuicao ";"`, `laco_while`, `laco_for`
+com as três cláusulas e `condicional` com `else` (sintaxe). As variáveis são
+definidas antes do uso e as condições (`x > 0`, `i < 5`, `soma > 20`) são
+booleanas (semântica).
+
+### Exemplo 2: inválido léxico
+```
+x = 5 @ 3;
+```
+**Justificativa:** o caractere `@` não pertence a nenhuma das 25 classes de token,
+então nenhuma expressão regular o reconhece. O erro ocorre no lexer, antes do parser.
+
+### Exemplo 3: inválido sintático
+```
+x = (1 + ;
+```
+**Justificativa:** os tokens são válidos, mas a regra
+`aritmetica = termo { ( "+" | "-" ) termo }` exige um `termo` depois do `+`, e
+aparece `";"`. Além disso, o `"("` aberto em `fator` nunca é fechado por `")"`.
+
+### Exemplo 4: inválido sintático, laço mal formado (`exemplos/programa_invalido.ml`)
+```
+for (i = 0; i < 10) {
+  print(i);
+}
+```
+**Justificativa:** viola `laco_for = "for" "(" atribuicao ";" expressao ";" atribuicao ")" bloco`.
+Depois da condição `i < 10`, a regra exige um `";"` e a atribuição de atualização,
+mas o parser encontra `")"`. Faltam a segunda cláusula `;` e a atualização.
+
+### Exemplo 5: inválido semântico
+```
+x = 10;
+while (x) {
+  x = x - 1;
+}
+```
+**Justificativa:** sintaticamente é válido: `laco_while = "while" "(" expressao ")" bloco`
+aceita qualquer `expressao`, e `x` é um `fator`. A violação é semântica: a condição
+do `while` deve ser booleana, mas `x` é inteiro. A gramática não distingue tipos;
+essa verificação é feita pelo interpretador (item e).
 
 ## 5. Lexer
 ### Tabela de tokens
