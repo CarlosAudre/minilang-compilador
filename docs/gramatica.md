@@ -37,7 +37,19 @@
 
 ## 2. Gramática EBNF
 ```ebnf
-(* TODO (item a) *)
+programa    = { comando } ;
+comando     = atribuicao ";" | impressao | condicional | laco_while | laco_for | bloco ;
+atribuicao  = ID "=" expressao ;
+impressao   = "print" "(" expressao ")" ";" ;
+condicional = "if" "(" expressao ")" bloco [ "else" bloco ] ;
+laco_while  = "while" "(" expressao ")" bloco ;
+laco_for    = "for" "(" atribuicao ";" expressao ";" atribuicao ")" bloco ;
+bloco       = "{" { comando } "}" ;
+expressao   = comparacao ;
+comparacao  = aritmetica [ ( "<" | ">" | "<=" | ">=" | "==" | "!=" ) aritmetica ] ;
+aritmetica  = termo { ( "+" | "-" ) termo } ;
+termo       = fator { ( "*" | "/" ) fator } ;
+fator       = NUM | "true" | "false" | ID | "(" expressao ")" ;
 ```
 
 ## 3. Precedência e associatividade
