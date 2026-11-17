@@ -1,7 +1,6 @@
 # Definição formal da MiniLang
 
 ## 1. Alfabeto (tokens)
-## 1. Alfabeto (tokens)
 
 | # | Classe | Valor-lexema | Exemplo |
 |---|--------|--------------|---------|
