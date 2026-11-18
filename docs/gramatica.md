@@ -180,4 +180,60 @@ Definições auxiliares: `dígito = [0-9]`, `letra = [a-zA-Z]`.
 | Comentário de bloco | `/* ... */` | `/* oi */` |
 
 ### Tabela de transições do autômato
-_TODO (item b)_
+**Estados**
+
+| Estado | Significado | Token ao parar nele |
+|--------|-------------|---------------------|
+| q0 | inicial (nada lido) | - |
+| q1 | lendo dígitos | T_num |
+| q2 | lendo letras e dígitos | T_id (ou palavra reservada) |
+| q3 | leu `<` | T_menor |
+| q4 | leu `>` | T_maior |
+| q5 | leu `=` | T_atrib |
+| q6 | leu `!` | não é final |
+| q7 | leu `/` | T_div |
+| q8 | leu `<=` | T_menorig |
+| q9 | leu `>=` | T_maiorig |
+| q10 | leu `==` | T_igual |
+| q11 | leu `!=` | T_dif |
+| q12 | dentro de comentário `//` | descartado |
+| q13 | dentro de comentário `/* ... */` | não é final |
+| q14 | dentro de `/* ... */`, acabou de ler `*` | não é final |
+
+**Transições a partir de q0**
+
+| Caractere lido | Destino |
+|----------------|---------|
+| dígito | q1 |
+| letra | q2 |
+| `<` | q3 |
+| `>` | q4 |
+| `=` | q5 |
+| `!` | q6 |
+| `/` | q7 |
+| `+ - * ( ) { } ;` | gera o token do símbolo e volta a q0 |
+| espaço, tab, `\n` | q0 (descartado) |
+| qualquer outro (`@`, `#`...) | ERRO |
+
+**Transições a partir dos demais estados**
+
+| Estado | dígito | letra | `=` | `/` | `*` | `\n` | outro |
+|--------|--------|-------|-----|-----|-----|------|-------|
+| q1 | q1 | **ERRO** (ex.: `1x`) | fecha | fecha | fecha | fecha | fecha |
+| q2 | q2 | q2 | fecha | fecha | fecha | fecha | fecha |
+| q3 | fecha | fecha | q8 | fecha | fecha | fecha | fecha |
+| q4 | fecha | fecha | q9 | fecha | fecha | fecha | fecha |
+| q5 | fecha | fecha | q10 | fecha | fecha | fecha | fecha |
+| q6 | ERRO | ERRO | q11 | ERRO | ERRO | ERRO | ERRO |
+| q7 | fecha | fecha | fecha | q12 | q13 | fecha | fecha |
+| q8 a q11 | fecha | fecha | fecha | fecha | fecha | fecha | fecha |
+| q12 | q12 | q12 | q12 | q12 | q12 | q0 | q12 |
+| q13 | q13 | q13 | q13 | q13 | q14 | q13 | q13 |
+| q14 | q13 | q13 | q13 | q0 | q14 | q13 | q13 |
+
+**Convenções**
+
+- **fecha**: o lexer emite o token do estado atual, volta a q0 e **não consome** o caractere lido, que será tratado de novo em q0. É a regra da leitura mais longa (`<=` vence `<`).
+- **Fim da entrada**: nos estados finais emite o token; em q12 termina normalmente; em q6, q13 e q14 é **ERRO** (`!` sem `=` e comentário de bloco não fechado).
+- **Palavras reservadas**: ao fechar q2, o lexema é comparado com a lista (`true false while for if else print`). Se estiver nela, o token tem a classe da palavra; senão, é `T_id`.
+- **ERRO** é um estado de rejeição: o lexer para e informa a linha e a coluna.
