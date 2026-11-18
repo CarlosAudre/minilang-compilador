@@ -14,3 +14,14 @@
   - **Falha da IA:** afirmou que `1x` é erro léxico automaticamente. Está errado: um lexer comum lê `1` e `x` como dois tokens válidos. Vamos decidir no item (b) que o lexer rejeita número seguido de letra.
 - **Dificuldades:** entender por que cada token fica em um nível da gramática e como a precedência vem da hierarquia das regras.
 - **Próximos passos:** item (b): expressões regulares de cada token, autômato, tabela de transições e `lexer.py`.
+
+  ### 18/11: Item (b), análise léxica
+- **O que foi feito:** padrão (expressão regular) de cada token, tabela de transições do autômato (q0 a q14), `src/lexer.py` e 21 testes (válidos e inválidos).
+- **Uso de IA (Claude):** explicação de expressão regular e autômato; geração do `lexer.py` e da tabela de transições; geração dos testes.
+- **Aceito / reescrito / descartado e por quê:**
+  - Decidimos aceitar comentário de bloco `/* */`, porque o `//` nunca fica aberto e o enunciado pede o teste "comentário não fechado".
+  - Decidimos rejeitar `1x` no lexer, para o erro ser léxico.
+  - Conferimos a tabela fazendo o trace de `1x` e de `/* oi */` no código e na tabela.
+  - **Falha da IA:** misturou o escopo dos itens (a) e (b) e antecipou a coluna "padrão" e o autômato; corrigimos conferindo o enunciado.
+- **Dificuldades:** entender a ligação entre expressão regular, autômato e código.
+- **Próximos passos:** item (c), parser e AST.
