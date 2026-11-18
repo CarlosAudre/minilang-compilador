@@ -141,9 +141,43 @@ essa verificação é feita pelo interpretador (item e).
 
 ## 5. Lexer
 ### Tabela de tokens
+Definições auxiliares: `dígito = [0-9]`, `letra = [a-zA-Z]`.
+
+| Tipo | Padrão (expressão regular) | Exemplo |
+|------|----------------------------|---------|
+| T_num | `dígito dígito*` | 0, 42 |
+| T_id | `letra (letra \| dígito)*`, exceto palavras reservadas | x, soma |
+| T_true | `true` | true |
+| T_false | `false` | false |
+| T_while | `while` | while |
+| T_for | `for` | for |
+| T_if | `if` | if |
+| T_else | `else` | else |
+| T_print | `print` | print |
+| T_mais | `+` | + |
+| T_menos | `-` | - |
+| T_mult | `*` | * |
+| T_div | `/` | / |
+| T_menor | `<` | < |
+| T_maior | `>` | > |
+| T_menorig | `<=` | <= |
+| T_maiorig | `>=` | >= |
+| T_igual | `==` | == |
+| T_dif | `!=` | != |
+| T_atrib | `=` | = |
+| T_apar | `(` | ( |
+| T_fpar | `)` | ) |
+| T_ach | `{` | { |
+| T_fch | `}` | } |
+| T_ptvg | `;` | ; |
+
+**Descartados pelo lexer (não geram token):**
+
 | Tipo | Padrão | Exemplo |
 |------|--------|---------|
-| _TODO (item b)_ | | |
+| Espaço | `(espaço \| tab \| quebra de linha)+` | |
+| Comentário de linha | `// (qualquer caractere exceto quebra de linha)*` | `// oi` |
+| Comentário de bloco | `/* ... */` | `/* oi */` |
 
 ### Tabela de transições do autômato
 _TODO (item b)_
