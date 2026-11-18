@@ -16,6 +16,10 @@ Conforme a Portaria CNPq nº 2.664/2026, declaramos que **houve uso** de IA gene
 | Item (a): precedência e exemplos | Redação da tabela de precedência e dos 5 exemplos justificados, conferidos pelo grupo |
 | Revisão teórica | Explicação de conceitos da disciplina (derivação, ambiguidade, AST) |
 
+| Item (b): lexer | Explicação de expressões regulares e autômatos; geração do `lexer.py` e da tabela de transições, conferidos e testados pelo grupo |
+| Item (b): testes do lexer | Geração dos testes válidos e inválidos, executados pelo grupo (21 passando) |
+| Relatório (rascunho) | Rascunho da seção de análise léxica e dos exemplos de acertos e falhas da IA, revisados pelo grupo |
+
 
 Todo código e artefato gerado foi revisado, testado e é explicado pelos integrantes.
 O acompanhamento detalhado está em `docs/diario_de_bordo.md`.
