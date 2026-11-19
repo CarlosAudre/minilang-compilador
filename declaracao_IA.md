@@ -18,6 +18,7 @@ Conforme a Portaria CNPq nº 2.664/2026, declaramos que **houve uso** de IA gene
 | Item (b): lexer | Explicação de expressões regulares e autômatos; geração do `lexer.py` e da tabela de transições, conferidos e testados pelo grupo |
 | Item (b): testes do lexer | Geração dos testes válidos e inválidos, executados pelo grupo (21 passando) |
 | Item (d): AST | Inclusão do campo `linha` nos nós, preenchimento no parser e geração de `tests/validos/test_ast.py`, conferidos e testados pelo grupo |
+| Item (e): interpretador | Geração do `interpreter.py` (tabela de símbolos, verificações de tipo, limite de iterações) e dos testes válidos e inválidos, conferidos e testados pelo grupo |
 | Relatório (rascunho) | Rascunho da seção de análise léxica e dos exemplos de acertos e falhas da IA, revisados pelo grupo |
 
 Todo código e artefato gerado foi revisado, testado e é explicado pelos integrantes.

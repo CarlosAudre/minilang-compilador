@@ -35,3 +35,14 @@
 - **Dificuldades:** diferença entre árvore sintática concreta e abstrata; entender por que os parênteses não precisam virar nó.
 - **Próximos passos:** item (e), interpretador e tabela de símbolos.
 
+### 19/11: Item (e), interpretador
+- **O que foi feito:** `src/interpreter.py` com a tabela de símbolos (dicionário nome -> símbolo com tipo, valor e linha de definição; operações `inserir` e `buscar`), interpretador que percorre a AST, verificações semânticas e limite de iterações dos laços; testes em `tests/validos/test_interpreter_valido.py` e `tests/invalidos/test_interpreter_invalido.py`.
+- **Uso de IA (Claude):** geração do interpretador e dos testes; explicação de semântica operacional.
+- **Aceito / reescrito / descartado e por quê:**
+  - Decisão do grupo: o tipo da variável é fixado na primeira atribuição (`x = 1; x = true;` é erro de tipo incompatível), para a tabela de símbolos ter papel na verificação de tipos.
+  - Decisão do grupo: `/` trunca em direção a zero, como C e Java; o `//` do Python daria `-7 / 2 = -4`.
+  - Ponto de atenção: em Python `bool` é subclasse de `int`, então `isinstance(True, int)` é verdadeiro; a verificação usa `type(v) is bool` para `1 + true` ser rejeitado.
+  - Limitação aceita: as verificações são dinâmicas; um erro de tipo dentro de um `if (false)` não é detectado.
+- **Dificuldades:** escrever a semântica operacional do `for` e mostrar que equivale a `inicialização; while (condição) { corpo atualização }`.
+- **Próximos passos:** item (f), catálogo de erros; item (g), testes de laços e laço infinito.
+
