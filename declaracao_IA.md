@@ -4,7 +4,7 @@ Conforme a Portaria CNPq nº 2.664/2026, declaramos que **houve uso** de IA gene
 
 ## Ferramenta
 - Nome: Claude (Anthropic)
-- Modelo/versão: Claude Sonnet 5.5
+- Modelo/versão: Claude Sonnet 5.5 (itens a, b e c) e Claude Opus 5.5 (itens d e e)
 
 ## Etapas e finalidade
 
