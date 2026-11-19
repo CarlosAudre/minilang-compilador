@@ -25,3 +25,13 @@
   - **Falha da IA:** misturou o escopo dos itens (a) e (b) e antecipou a coluna "padrão" e o autômato; corrigimos conferindo o enunciado.
 - **Dificuldades:** entender a ligação entre expressão regular, autômato e código.
 - **Próximos passos:** item (c), parser e AST.
+
+### 19/11: Item (d), AST
+- **O que foi feito:** revisão das classes de `src/ast_nodes.py` (campos de `While`: condição e corpo; de `For`: inicialização, condição, atualização e corpo), campo `linha` em todos os nós, preenchido pelo parser, e testes da AST em `tests/validos/test_ast.py`.
+- **Uso de IA (Claude):** sugestão do campo `linha` (para as mensagens de erro semântico do item e) e geração dos testes da AST.
+- **Aceito / reescrito / descartado e por quê:**
+  - Aceito: `linha` com `compare=False`, para duas árvores com a mesma estrutura continuarem iguais mesmo vindo de linhas diferentes; assim os testes do parser não mudaram.
+  - Aceito: teste que mostra que um `for` tem as mesmas partes de um `i = 0; while (...) { corpo; atualização; }`, usado na justificativa de que a AST não perde informação.
+- **Dificuldades:** diferença entre árvore sintática concreta e abstrata; entender por que os parênteses não precisam virar nó.
+- **Próximos passos:** item (e), interpretador e tabela de símbolos.
+

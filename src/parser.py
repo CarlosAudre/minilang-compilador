@@ -77,7 +77,7 @@ class Parser:
         comandos = []
         while self.atual() is not None:
             comandos.append(self.comando())
-        return Programa(comandos)
+        return Programa(comandos, linha=1)
 
     def comando(self):
         # comando = atribuicao ";" | impressao | condicional
@@ -100,20 +100,20 @@ class Parser:
         self.erro("um comando")
 
     def atribuicao(self):                    # atribuicao = ID "=" expressao ;
-        nome = self.consumir("T_id").valor
+        t = self.consumir("T_id")
         self.consumir("T_atrib")
-        return Atribuicao(nome, self.expressao())
+        return Atribuicao(t.valor, self.expressao(), linha=t.linha)
 
     def impressao(self):                     # "print" "(" expressao ")" ";" ;
-        self.consumir("T_print")
+        t = self.consumir("T_print")
         self.consumir("T_apar")
         expr = self.expressao()
         self.consumir("T_fpar")
         self.consumir("T_ptvg")
-        return Print(expr)
+        return Print(expr, linha=t.linha)
 
     def condicional(self):                   # "if" "(" e ")" bloco [ "else" bloco ] ;
-        self.consumir("T_if")
+        t = self.consumir("T_if")
         self.consumir("T_apar")
         cond = self.expressao()
         self.consumir("T_fpar")
@@ -122,18 +122,18 @@ class Parser:
         if self.tipo_atual() == "T_else":
             self.consumir("T_else")
             senao = self.bloco()
-        return If(cond, entao, senao)
+        return If(cond, entao, senao, linha=t.linha)
 
     def laco_while(self):                    # "while" "(" expressao ")" bloco ;
-        self.consumir("T_while")
+        t = self.consumir("T_while")
         self.consumir("T_apar")
         cond = self.expressao()
         self.consumir("T_fpar")
-        return While(cond, self.bloco())
+        return While(cond, self.bloco(), linha=t.linha)
 
     def laco_for(self):
         # "for" "(" atribuicao ";" expressao ";" atribuicao ")" bloco ;
-        self.consumir("T_for")
+        t = self.consumir("T_for")
         self.consumir("T_apar")
         inicio = self.atribuicao()
         self.consumir("T_ptvg")
@@ -141,15 +141,15 @@ class Parser:
         self.consumir("T_ptvg")
         atualizacao = self.atribuicao()
         self.consumir("T_fpar")
-        return For(inicio, cond, atualizacao, self.bloco())
+        return For(inicio, cond, atualizacao, self.bloco(), linha=t.linha)
 
     def bloco(self):                         # bloco = "{" { comando } "}" ;
-        self.consumir("T_ach")
+        t = self.consumir("T_ach")
         comandos = []
         while self.tipo_atual() not in ("T_fch", None):
             comandos.append(self.comando())
         self.consumir("T_fch")
-        return Bloco(comandos)
+        return Bloco(comandos, linha=t.linha)
 
     # ---------- expressões (um nível de precedência por função) ----------
     def expressao(self):                     # expressao = comparacao ;
@@ -159,40 +159,45 @@ class Parser:
         # comparacao = aritmetica [ ( "<" | ">" | ... ) aritmetica ] ;
         esquerda = self.aritmetica()
         if self.tipo_atual() in COMPARACAO:  # [ ] : no máximo uma vez
-            op = COMPARACAO[self.atual().tipo]
+            t = self.atual()
             self.pos += 1
             direita = self.aritmetica()
-            return OpBinaria(op, esquerda, direita)
+            return OpBinaria(COMPARACAO[t.tipo], esquerda, direita, linha=t.linha)
         return esquerda
 
     def aritmetica(self):                    # termo { ( "+" | "-" ) termo } ;
         esquerda = self.termo()
         while self.tipo_atual() in ADITIVOS: # { } : repete, associa à esquerda
-            op = ADITIVOS[self.atual().tipo]
+            t = self.atual()
             self.pos += 1
-            esquerda = OpBinaria(op, esquerda, self.termo())
+            esquerda = OpBinaria(ADITIVOS[t.tipo], esquerda, self.termo(),
+                                 linha=t.linha)
         return esquerda
 
     def termo(self):                         # fator { ( "*" | "/" ) fator } ;
         esquerda = self.fator()
         while self.tipo_atual() in MULTIPLICATIVOS:
-            op = MULTIPLICATIVOS[self.atual().tipo]
+            t = self.atual()
             self.pos += 1
-            esquerda = OpBinaria(op, esquerda, self.fator())
+            esquerda = OpBinaria(MULTIPLICATIVOS[t.tipo], esquerda, self.fator(),
+                                 linha=t.linha)
         return esquerda
 
     def fator(self):                         # NUM | "true" | "false" | ID | "(" e ")"
+        t = self.atual()
         tipo = self.tipo_atual()
         if tipo == "T_num":
-            return Numero(self.consumir("T_num").valor)
+            self.pos += 1
+            return Numero(t.valor, linha=t.linha)
         if tipo == "T_true":
             self.pos += 1
-            return Booleano(True)
+            return Booleano(True, linha=t.linha)
         if tipo == "T_false":
             self.pos += 1
-            return Booleano(False)
+            return Booleano(False, linha=t.linha)
         if tipo == "T_id":
-            return Variavel(self.consumir("T_id").valor)
+            self.pos += 1
+            return Variavel(t.valor, linha=t.linha)
         if tipo == "T_apar":
             self.pos += 1
             expr = self.expressao()
