@@ -33,7 +33,6 @@
   - **Falha da IA:** as árvores do relatório eram só ASTs, e o enunciado do item (c) fala em "árvore sintática"; acrescentamos as árvores de derivação (concretas) para cobrir as duas leituras.
   - Mantivemos `comparacao` com `[ ]` (não encadeia) e rejeitamos `-5`, por não haver menos unário.
 - **Dificuldades:** entender por que cada operador fica em um nível da gramática e como a hierarquia de funções vira precedência.
-- **Próximos passos:** item (f), catálogo de erros, e os testes de laço do item (g).
 
 ### 19/11: Item (d), AST
 - **O que foi feito:** revisão das classes de `src/ast_nodes.py` (campos de `While`: condição e corpo; de `For`: inicialização, condição, atualização e corpo), campo `linha` em todos os nós, preenchido pelo parser, e testes da AST em `tests/validos/test_ast.py`.
