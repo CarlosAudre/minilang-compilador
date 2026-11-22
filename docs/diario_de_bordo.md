@@ -54,3 +54,19 @@
 - **Dificuldades:** escrever a semântica operacional do `for` e mostrar que equivale a `inicialização; while (condição) { corpo atualização }`.
 - **Próximos passos:** item (f), catálogo de erros; item (g), testes de laços e laço infinito.
 
+### 22/11: Item (f), catálogo de erros
+- **O que foi feito:** pasta `exemplos/erros/` com 10 programas (3 léxicos, 3 sintáticos, 4 semânticos), incluindo `for` sem atualização, `while` sem bloco, `while` com condição `int` e variável de controle não definida; catálogo (mensagem, causa, exemplo) e justificativa da estratégia fail-fast em `docs/relatorio_letras_f_g.md`; `tests/invalidos/test_catalogo_erros.py` executa cada arquivo pela linha de comando e confere código de saída 1 e a mensagem.
+- **Uso de IA (Claude):** geração dos programas de erro, do teste do catálogo e do rascunho do catálogo e da justificativa.
+- **Aceito / reescrito / descartado e por quê:**
+  - Aceito: um arquivo de teste por categoria já existia (`test_lexer_invalido`, `test_parser_invalido`, `test_interpreter_invalido`), cada um com o resultado esperado no topo; o novo teste só cobre a execução de ponta a ponta.
+  - Decisão: estratégia fail-fast (parar no primeiro erro), sem recuperação em modo pânico, porque erros em cascata confundem o iniciante.
+  - Limitação aceita: verificação semântica dinâmica; erro de tipo dentro de `if (false)` não é detectado.
+- **Dificuldades:** separar o que é erro léxico (`1x`) do que seria erro sintático.
+
+### 22/11: Item (g), suíte de testes e relatório
+- **O que foi feito:** `tests/validos/test_lacos.py` (laço que não executa, executa 1 vez, executa N vezes, `for` com passo diferente de 1, equivalência `for` e `while`, aninhamento) e `tests/invalidos/test_laco_infinito.py` (limite de iterações em `while` e `for`, borda do limite, contador por laço). A suíte passou de 126 para 169 testes, todos passando.
+- **Uso de IA (Claude):** geração dos testes de laços e de laço infinito; rascunho da seção do relatório e da tabela de fundamentação teórica.
+- **Aceito / reescrito / descartado e por quê:**
+  - Aceito: limite pequeno (5 a 100) nos testes, para a suíte não travar nem demorar.
+  - Pendente do grupo: conferir os exemplos de acertos e falhas do relatório (o quinto está em branco) e passar `docs/relatorio_letras_f_g.md` para o `docs/relatorio.pdf`, que deve ter de 2 a 3 páginas na Parte A.
+- **Próximos passos:** vídeo de 5 minutos (`docs/apresentacao.mp4`), preencher o link no README, atualizar `declaracao_IA.md`.
